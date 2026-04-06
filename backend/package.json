@@ -1,4 +1,7 @@
-{
+"scripts": {
+  "start": "node server.js",
+  "dev": "node server.js" 
+},{
   "name": "webdevproject",
   "version": "1.0.0",
   "description": "This is the project repository",
