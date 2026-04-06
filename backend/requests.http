@@ -1,0 +1,13 @@
+### 1. Test POST Route (Create a Post)
+POST http://127.0.0.1:5000/api/posts
+Content-Type: application/json
+
+{
+  "title": "Need help understandin",
+  "body": "Can anyone explain the advantage of the submission queue over traditional read/write system calls?",
+  "author": "Noah",
+  "tags": ["Linux", "Syscalls", "Help"]
+}
+
+### 2. Test GET Route (Fetch all Posts)
+GET http://127.0.0.1:5000/api/posts

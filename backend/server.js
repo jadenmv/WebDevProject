@@ -29,10 +29,11 @@ app.get("/api/posts", async (req, res) => {
 
 app.post("/api/posts", async (req, res) => {
     try{
-        const newPost = newPost(req.body);
+        const newPost = new Post(req.body);
         const savedPost = await newPost.save();
         res.status(201).json(savedPost);
     }catch(err) {
+        console.error("FULL DB ERROR: ", err);
         res.status(500).json({message : "CANNOT FETCH POSTS", err});
     }
 })
