@@ -1,50 +1,34 @@
-// src/App.jsx
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    // Fetch the posts from your running backend
+    fetch('http://localhost:5000/api/posts')
+        .then((response) => response.json())
+        .then((data) => setPosts(data))
+        .catch((error) => console.error('Error fetching posts:', error));
+  }, []);
+
   return (
-    <div className="app-container">
-      {/* navigation bar */}
-      <header className="navbar">
-        <div className="logo">Compile</div>
-        {/* Asynch live search here */}
-        <input type="text" placeholder="Search courses, tags, or posts..." />
-        <nav>
-          <button>Login</button>
-          <button>Sign Up</button>
-        </nav>
-      </header>
+      <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+        <h1>Compile Discussion Board</h1>
 
-      <div className="main-layout">
-        {/* sidebar for categories */}
-        <aside className="sidebar">
-          <h3>Categories</h3>
-          <ul>
-            <li>Tech Help / Coding</li>
-            <li>CS Concepts</li>
-            <li>Career & Job Market</li>
-            <li>Venting / Uneasy Subjects</li>
-          </ul>
-        </aside>
-
-        {/* primary discussion feed */}
-        <main className="feed">
-          <h2>Recent Discussions</h2>
-          
-          {/* single thread card ex */}
-          <article className="thread-card">
-            <h4>How do I invert a binary tree?</h4>
-            <p>Posted by CS_Student_99 in Tech Help</p>
-            <div className="thread-actions">
-              <button>Upvote</button>
-              <button>Downvote</button>
-              <span>15 Comments</span>
-            </div>
-          </article>
-          
-        </main>
+        {posts.length === 0 ? (
+            <p>Loading posts...</p>
+        ) : (
+            posts.map((post) => (
+                <div key={post._id} style={{ border: '1px solid #ccc', margin: '10px 0', padding: '15px', borderRadius: '5px' }}>
+                  <h2>{post.title}</h2>
+                  <p>{post.body}</p>
+                  <small>Posted by {post.author}</small>
+                  <br />
+                  <small>Tags: {post.tags.join(', ')}</small>
+                </div>
+            ))
+        )}
       </div>
-    </div>
   );
 }
 
