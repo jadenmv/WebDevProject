@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getAllPosts } from "../api/post/get"
+import Create from "./components/Form"
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -21,6 +22,9 @@ function App() {
   return (
       <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
         <h1>Compile Discussion Board</h1>
+
+        // temporarily rendering form for testing, can be deleted
+        <Create />
 
         {posts.length === 0 ? (
             <p>Loading posts...</p>
