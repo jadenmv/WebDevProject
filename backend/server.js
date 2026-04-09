@@ -6,6 +6,8 @@ require("dotenv").config();
 const Post = require("./models/Post");
 const app = express();
 
+const { createNewUser } = require("./POST/user.js")
+
 app.use(cors());
 app.use(express.json());
 
@@ -13,12 +15,12 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log("DB CONNECTION ERROR: ", err));
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
     res.send("Backend is running")
 })
 
 
-app.get("/api/posts", async (req, res) => {
+app.get("/api/posts", async (_req, res) => {
     try {
         const posts = await Post.find().sort({createdAt: -1});
         res.status(200).json(posts);
@@ -37,6 +39,8 @@ app.post("/api/posts", async (req, res) => {
         res.status(500).json({message : "CANNOT FETCH POSTS", err});
     }
 })
+
+app.post("/api/user", createNewUser)
 
 
 const PORT = process.env.PORT || 5000;
