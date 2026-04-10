@@ -50,4 +50,4 @@ function generateDefaultUsername() {
   return "AnonymousUser_" + crypto.randomBytes(4).toString("hex");
 }
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.models.User || mongoose.model("User", userSchema);
