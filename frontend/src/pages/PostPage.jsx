@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createNewPost } from "../../api/posts";
+import { createNewPost } from "../api/posts";
 
 export default function PostPage() {
   const [postData, setPostData] = useState({

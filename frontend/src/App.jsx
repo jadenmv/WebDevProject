@@ -1,17 +1,28 @@
 import { Routes, Route } from "react-router-dom";
 import { NavBar } from "./components/navigation/NavBar";
 import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
+import AuthPage from "./pages/AuthPage"
 import PostPage from "./pages/PostPage";
+import ThemeToggle from "./components/ui/ThemeToggle";
+import { useLocation } from "react-router-dom"
 
 function App() {
+  const location = useLocation();
+
+  const hiddenNavbarRoutes = ["/auth"]
+  const shouldHideNavbar = hiddenNavbarRoutes.includes(location.pathname)
+
+  const layoutClass = hiddenNavbarRoutes.includes(location.pathname) ?
+    "" : "mx-[200px]"
+
   return (
     <div className="min-h-screen w-screen">
-      <NavBar />
-      <div className="mx-[200px]">
+      {!shouldHideNavbar && <NavBar />}
+      <ThemeToggle />
+      <div className={layoutClass}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/auth" element={<LoginPage />} />
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="/post" element={<PostPage />} />
         </Routes>
       </div>

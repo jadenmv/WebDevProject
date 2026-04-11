@@ -1,0 +1,132 @@
+import { useState } from "react";
+import { authenticateUser } from "../api/auth";
+
+export default function AuthPage() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setMessage("")
+
+    try {
+      const data = await authenticateUser({
+        isLogin,
+        email,
+        password,
+        username
+      })
+
+      if (isLogin) {
+        setMessage(`LOGGED IN AS ${data.user.username}`)
+        console.log("YOUR JWT TOKEN:", data.token)
+      } else {
+        setMessage("ACCOUNT CREATED, YOU CAN NOW LOGIN");
+        setIsLogin(true)
+        setPassword("");
+        setUsername("");
+      }
+    } catch (error) {
+      console.error("AUTHENTICATION ERROR:", error);
+      setMessage(error.message)
+    }
+  }
+
+  return (
+    <div className="flex flex-row h-screen w-screen">
+      <div className="flex justify-center items-center h-full w-1/2 bg-gray-50 dark:bg-gray-800 transition-all">
+        <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md w-full max-w-md border border-gray-200 dark:border-gray-600">
+          <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-50 pb-2">
+            {isLogin ? "Welcome Back to Compile" : "Join the Discussion"}
+          </h2>
+
+          {message && (
+            <div
+              className={`p-3 mb-4 text-sm rounded ${message.includes("Success") || message.includes("created") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
+            >
+              {message}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Only show Username input if they are registering */}
+            {!isLogin && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required={!isLogin}
+                  className="w-full p-2 border border-gray-300 text-black dark:text-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="CS_Student_99"
+                />
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-2 border border-gray-300 text-black dark:text-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="student@university.edu"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-50 mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full p-2 border border-gray-300 text-black dark:text-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-200 cursor-pointer"
+            >
+              {isLogin ? "Log In" : "Create Account"}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-100">
+            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            <button
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setMessage(""); // Clear errors when toggling
+              }}
+              className="text-blue-600 font-semibold hover:underline cursor-pointer"
+            >
+              {isLogin ? "Sign up" : "Log in"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative w-1/2 h-full dark:opacity-75 transition-all duration-300">
+        <img 
+          src="/AuthPageCover.jpg"
+          alt="Auth page cover"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    </div>
+  );
+}

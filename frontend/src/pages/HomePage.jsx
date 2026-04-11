@@ -1,6 +1,6 @@
 import { Create } from "../components/Form"
 import { useState, useEffect } from "react"
-import { getAllPosts } from "../../api/posts";
+import { getAllPosts } from "../api/posts";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
